@@ -30,13 +30,13 @@ import java.sql.Statement;
 import java.sql.Struct;
 import java.sql.SQLClientInfoException;
 import java.sql.SQLXML;
-
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
+import java.util.concurrent.Executor;
 
 /**
  * Wraps a JDBC Connection and reports method calls, returns and exceptions.
@@ -49,7 +49,83 @@ public class ConnectionSpy implements Connection, Spy
 {
   private Connection realConnection;
 
-  /**
+  public void setSchema(String schema) throws SQLException {
+	 String methodCall = "setSchema("+schema+")";
+	    try
+	    {
+	    	realConnection.setSchema(schema);
+	    }
+	    catch (SQLException s)
+	    {
+	      reportException(methodCall, s);
+	      throw s;
+	    }
+	    reportReturn(methodCall);
+
+}
+
+public int getNetworkTimeout() throws SQLException {
+
+	 String methodCall = "getNetworkTimeout()";
+	    try
+	    {
+	    return   (Integer)  reportReturn(methodCall,	realConnection.getNetworkTimeout());
+	    }
+	    catch (SQLException s)
+	    {
+	      reportException(methodCall, s);
+	      throw s;
+	    }
+}
+
+public String getSchema() throws SQLException {
+
+	 String methodCall = "getSchema()";
+	    try
+	    {
+	    return   (String)  reportReturn(methodCall,	 realConnection.getSchema());
+	    }
+	    catch (SQLException s)
+	    {
+	      reportException(methodCall, s);
+	      throw s;
+	    }
+
+}
+
+public void abort(Executor executor) throws SQLException {
+
+
+	 String methodCall = "abort(Executor executor)";
+	    try
+	    {
+	    	realConnection.abort(executor);
+	    }
+	    catch (SQLException s)
+	    {
+	      reportException(methodCall, s);
+	      throw s;
+	    }
+	    reportReturn(methodCall);
+
+}
+
+public void setNetworkTimeout(Executor executor, int milliseconds)
+		throws SQLException {
+	 String methodCall = "setNetworkTimeout(Executor executor, int milliseconds)";
+	    try
+	    {
+	       realConnection.setNetworkTimeout(executor, milliseconds);
+	    }
+	    catch (SQLException s)
+	    {
+	      reportException(methodCall, s);
+	      throw s;
+	    }
+	    reportReturn(methodCall);
+}
+
+/**
    * Get the real underlying Connection that this ConnectionSpy wraps.
    *
    * @return the real underlying Connection.

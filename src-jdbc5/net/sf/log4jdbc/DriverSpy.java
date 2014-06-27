@@ -23,6 +23,7 @@ import java.sql.Driver;
 import java.sql.DriverManager;
 import java.sql.DriverPropertyInfo;
 import java.sql.SQLException;
+import java.sql.SQLFeatureNotSupportedException;
 import java.util.Enumeration;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -30,6 +31,7 @@ import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
 import java.util.TreeSet;
+import java.util.logging.Logger;
 
 /**
  * A JDBC driver which is a facade that delegates to one or more real underlying
@@ -97,7 +99,11 @@ public class DriverSpy implements Driver
    */
   private Driver lastUnderlyingDriverRequested;
 
-  /**
+  public Logger getParentLogger() throws SQLFeatureNotSupportedException {
+	return lastUnderlyingDriverRequested == null ? null :  lastUnderlyingDriverRequested.getParentLogger();
+}
+
+/**
    * Maps driver class names to RdbmsSpecifics objects for each kind of
    * database.
    */

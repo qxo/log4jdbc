@@ -56,7 +56,37 @@ public class StatementSpy implements Statement, Spy
     return realStatement;
   }
 
-  /**
+  @Override
+public void closeOnCompletion() throws SQLException {
+	  String methodCall = "closeOnCompletion()";
+	    try
+	    {
+	    	 realStatement.closeOnCompletion();
+	    }
+	    catch (SQLException s)
+	    {
+	      reportException(methodCall, s);
+	      throw s;
+	    }
+	    reportReturn(methodCall);
+}
+
+@Override
+public boolean isCloseOnCompletion() throws SQLException {
+	  String methodCall = "isCloseOnCompletion()";
+	    try
+	    {
+	    	 return (Boolean) reportReturn(methodCall,  realStatement.isCloseOnCompletion());
+	    }
+	    catch (SQLException s)
+	    {
+	      reportException(methodCall, s);
+	      throw s;
+	    }
+
+}
+
+/**
    * Create a StatementSpy that wraps another Statement
    * for the purpose of logging all method calls, sql, exceptions and return values.
    *
