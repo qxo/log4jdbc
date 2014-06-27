@@ -223,6 +223,8 @@ public class DriverSpy implements Driver
    */
   static boolean SuppressGetGeneratedKeysException;
 
+  static RdbmsSpecifics defaultRdbmsSpecifics = new RdbmsSpecifics();
+
   /**
    * Get a Long option from a property and
    * log a debug message about this.
@@ -475,6 +477,7 @@ public class DriverSpy implements Driver
       subDrivers.add("org.postgresql.Driver");
       subDrivers.add("org.hsqldb.jdbcDriver");
       subDrivers.add("org.h2.Driver");
+      subDrivers.add("com.ibm.db2.jcc.DB2Driver");
     }
 
     // look for additional driver specified in properties
@@ -540,10 +543,30 @@ public class DriverSpy implements Driver
     rdbmsSpecifics.put("weblogic.jdbc.sqlserver.SQLServerDriver", sqlServer);
     rdbmsSpecifics.put("com.mysql.jdbc.Driver", mySql);
 
+    Db2RdbmsSpecifics db2 = new Db2RdbmsSpecifics();
+    rdbmsSpecifics.put("com.ibm.db2.jcc.DB2Driver", db2);
+    rdbmsSpecifics.put("COM.ibm.db2.jdbc.net.DB2Driver",db2);
+    rdbmsSpecifics.put("COM.ibm.db2.jdbc.app.DB2Driver",db2);
+
+
+
+	final String defaultRdbmsSpecificsCls = getStringOption(props, "log4jdbc.defaultRdbmsSpecifics");
+    if(defaultRdbmsSpecificsCls != null ){
+    	  try
+          {
+            Class<?> cls = Class.forName(defaultRdbmsSpecificsCls);
+            log.debug("  FOUND defaultRdbmsSpecifics " + defaultRdbmsSpecificsCls);
+            defaultRdbmsSpecifics=(RdbmsSpecifics)cls.newInstance();
+          }
+          catch (Throwable c)
+          {
+            c.printStackTrace();
+          }
+    }
     log.debug("... log4jdbc initialized! ...");
   }
 
-  static RdbmsSpecifics defaultRdbmsSpecifics = new RdbmsSpecifics();
+
 
   /**
    * Get the RdbmsSpecifics object for a given Connection.
