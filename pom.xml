@@ -3,14 +3,14 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.googlecode.log4jdbc</groupId>
 	<artifactId>log4jdbc</artifactId>
-	<version>1.2-fix3</version>
+	<version>1.2-fix4</version>
 	<packaging>jar</packaging>
 
 	<url>https://github.com/qxo/log4jdbc</url>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-		<srcDir>src-jdbc6</srcDir>
+		<srcDir>src-jdbc3</srcDir>
 	</properties>
 
 	<dependencies>
