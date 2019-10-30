@@ -28,6 +28,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
+import java.util.ServiceLoader;
 import java.util.Set;
 import java.util.TreeSet;
 
@@ -237,7 +238,7 @@ public class DriverSpy implements Driver
    */
   private static Long getLongOption(Properties props, String propName)
   {
-    String propValue = props.getProperty(propName);
+    String propValue = getProperty(props, propName);
     Long longPropValue = null;
     if (propValue == null)
     {
@@ -272,7 +273,7 @@ public class DriverSpy implements Driver
   private static Long getLongOption(Properties props, String propName,
     long defaultValue)
   {
-    String propValue = props.getProperty(propName);
+    String propValue = getProperty(props,propName);
     Long longPropValue;
     if (propValue == null)
     {
@@ -307,7 +308,7 @@ public class DriverSpy implements Driver
    */
   private static String getStringOption(Properties props, String propName)
   {
-    String propValue = props.getProperty(propName);
+    String propValue = getProperty(props, propName);
     if (propValue == null || propValue.length()==0)
     {
       log.debug("x " + propName + " is not defined");
@@ -319,6 +320,14 @@ public class DriverSpy implements Driver
     }
     return propValue;
   }
+
+  protected static String getProperty(Properties props, String propName) {
+	String propValue = CONFIG_PROVIDER == null ? null : CONFIG_PROVIDER.getProperty(propName);
+    if (propValue == null || propValue.length()==0) {
+    	propValue = props.getProperty(propName);
+    }
+	return propValue;
+}
 
   /**
    * Get a boolean option from a property and
@@ -334,7 +343,7 @@ public class DriverSpy implements Driver
   private static boolean getBooleanOption(Properties props, String propName,
     boolean defaultValue)
   {
-    String propValue = props.getProperty(propName);
+    String propValue = getProperty(props, propName);
     boolean val;
     if (propValue == null)
     {
@@ -359,43 +368,20 @@ public class DriverSpy implements Driver
     return val;
   }
 
+  private static final Log4jdbcConfigProvider CONFIG_PROVIDER;
+
   static
   {
     log.debug("... log4jdbc initializing ...");
 
-    InputStream propStream =
-      DriverSpy.class.getResourceAsStream("/log4jdbc.properties");
+	final Iterator<Log4jdbcConfigProvider> configLoader = 
+			ServiceLoader.load(Log4jdbcConfigProvider.class).iterator();
+	CONFIG_PROVIDER = configLoader.hasNext() ? configLoader.next() : null;
 
-    Properties props = new Properties(System.getProperties());
-    if (propStream != null)
-    {
-      try
-      {
-        props.load(propStream);
-      }
-      catch (IOException e)
-      {
-        log.debug("ERROR!  io exception loading " +
-          "log4jdbc.properties from classpath: " + e.getMessage());
-      }
-      finally
-      {
-        try
-        {
-          propStream.close();
-        }
-        catch (IOException e)
-        {
-          log.debug("ERROR!  io exception closing property file stream: " +
-            e.getMessage());
-        }
-      }
-      log.debug("  log4jdbc.properties loaded from classpath");
-    }
-    else
-    {
-      log.debug("  log4jdbc.properties not found on classpath");
-    }
+	final boolean noDefaultConfig = CONFIG_PROVIDER == null ? false 
+			:"true".equals(CONFIG_PROVIDER.getProperty("log4jdbc.disable_default_config"));
+	
+    Properties props = noDefaultConfig ? new Properties() : loadConfig();
 
     // look for additional driver specified in properties
     DebugStackPrefix = getStringOption(props, "log4jdbc.debug.stack.prefix");
@@ -565,6 +551,45 @@ public class DriverSpy implements Driver
     }
     log.debug("... log4jdbc initialized! ...");
   }
+
+
+
+protected static Properties loadConfig() {
+	InputStream propStream =
+      DriverSpy.class.getResourceAsStream("/log4jdbc.properties");
+
+    Properties props = new Properties(System.getProperties());
+    if (propStream != null)
+    {
+      try
+      {
+        props.load(propStream);
+      }
+      catch (IOException e)
+      {
+        log.debug("ERROR!  io exception loading " +
+          "log4jdbc.properties from classpath: " + e.getMessage());
+      }
+      finally
+      {
+        try
+        {
+          propStream.close();
+        }
+        catch (IOException e)
+        {
+          log.debug("ERROR!  io exception closing property file stream: " +
+            e.getMessage());
+        }
+      }
+      log.debug("  log4jdbc.properties loaded from classpath");
+    }
+    else
+    {
+      log.debug("  log4jdbc.properties not found on classpath");
+    }
+	return props;
+}
 
 
 
