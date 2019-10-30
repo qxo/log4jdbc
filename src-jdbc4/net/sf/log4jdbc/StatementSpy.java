@@ -142,7 +142,7 @@ public class StatementSpy implements Statement, Spy
    * @param methodCall description of method call and arguments passed to it that returned.
    * @param msg description of what the return value that was returned.  may be an empty String for void return types.
    */
-  protected void reportAllReturns(final String methodCall, final Object msg)
+  protected final void reportAllReturns(final String methodCall, final Object msg)
   {
     log.methodReturned(this, methodCall, msg);
   }

@@ -28,7 +28,7 @@ import org.slf4j.Logger;
  *
  * @author Arthur Blake
  */
-public class Slf4jSpyLogDelegator implements SpyLogDelegator
+public final class Slf4jSpyLogDelegator implements SpyLogDelegator
 {
   /**
    * Create a SpyLogDelegator specific to the Simple Logging Facade for Java (slf4j).

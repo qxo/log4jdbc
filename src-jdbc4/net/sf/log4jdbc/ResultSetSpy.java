@@ -46,7 +46,7 @@ import org.slf4j.Logger;
  *
  * @author Arthur Blake
  */
-public class ResultSetSpy implements ResultSet, Spy
+public final class ResultSetSpy implements ResultSet, Spy
 {
   private final SpyLogDelegator log;
 

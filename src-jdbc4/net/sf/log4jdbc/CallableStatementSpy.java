@@ -44,10 +44,6 @@ import java.util.Map;
  */
 public class CallableStatementSpy extends PreparedStatementSpy implements CallableStatement
 {
-  protected void reportAllReturns(String methodCall, String msg)
-  {
-    log.methodReturned(this, methodCall, msg);
-  }
 
   /**
    * The real underlying CallableStatement that this CallableStatementSpy wraps.

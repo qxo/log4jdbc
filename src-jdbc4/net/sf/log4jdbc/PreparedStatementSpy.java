@@ -146,11 +146,6 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
     return dumpSql.toString();
   }
 
-  protected void reportAllReturns(String methodCall, Object msg)
-  {
-    log.methodReturned(this, methodCall, msg);
-  }
-
   /**
    * The real PreparedStatement that this PreparedStatementSpy wraps.
    */
