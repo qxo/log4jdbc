@@ -51,7 +51,7 @@ public interface SpyLogDelegator
    * @param returnMsg  return value converted to a String for integral types, or String representation for Object
    *                   return types this will be null for void return types.
    */
-  public void methodReturned(Spy spy, String methodCall, String returnMsg);
+  public void methodReturned(Spy spy, String methodCall, Object returnMsg);
 
   /**
    * Called when a spied upon object is constructed.

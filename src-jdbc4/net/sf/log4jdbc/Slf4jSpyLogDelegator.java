@@ -164,7 +164,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator
    *                   String representation for Object.  Return types this will
    *                   be null for void return types.
    */
-  public void methodReturned(Spy spy, String methodCall, String returnMsg)
+  public void methodReturned(final Spy spy, final String methodCall, final Object returnMsg)
   {
     final Logger logger = spy.isResultSetSpy() ? resultSetLogger : jdbcLogger;
     if (logger.isInfoEnabled())

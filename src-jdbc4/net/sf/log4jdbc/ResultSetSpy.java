@@ -68,7 +68,7 @@ public class ResultSetSpy implements ResultSet, Spy
    * @param methodCall description of method call and arguments passed to it that returned.
    * @param msg description of what the return value that was returned.  may be an empty String for void return types.
    */
-  protected void reportAllReturns(String methodCall, String msg)
+  protected void reportAllReturns(final String methodCall, final Object msg)
   {
     log.methodReturned(this, methodCall, msg);
   }
@@ -129,7 +129,7 @@ public class ResultSetSpy implements ResultSet, Spy
    */
   protected boolean reportReturn(String methodCall, boolean value)
   {
-    reportAllReturns(methodCall, "" + value);
+    reportAllReturns(methodCall, value);
     return value;
   }
 
@@ -142,7 +142,7 @@ public class ResultSetSpy implements ResultSet, Spy
    */
   protected byte reportReturn(String methodCall, byte value)
   {
-    reportAllReturns(methodCall, "" + value);
+    reportAllReturns(methodCall, value);
     return value;
   }
 
@@ -155,7 +155,7 @@ public class ResultSetSpy implements ResultSet, Spy
    */
   protected int reportReturn(String methodCall, int value)
   {
-    reportAllReturns(methodCall, "" + value);
+    reportAllReturns(methodCall, value);
     return value;
   }
 
@@ -168,7 +168,7 @@ public class ResultSetSpy implements ResultSet, Spy
    */
   protected double reportReturn(String methodCall, double value)
   {
-    reportAllReturns(methodCall, "" + value);
+    reportAllReturns(methodCall, value);
     return value;
   }
 
@@ -181,7 +181,7 @@ public class ResultSetSpy implements ResultSet, Spy
    */
   protected short reportReturn(String methodCall, short value)
   {
-    reportAllReturns(methodCall, "" + value);
+    reportAllReturns(methodCall, value);
     return value;
   }
 
@@ -194,7 +194,7 @@ public class ResultSetSpy implements ResultSet, Spy
    */
   protected long reportReturn(String methodCall, long value)
   {
-    reportAllReturns(methodCall, "" + value);
+    reportAllReturns(methodCall, value);
     return value;
   }
 
@@ -207,7 +207,7 @@ public class ResultSetSpy implements ResultSet, Spy
    */
   protected float reportReturn(String methodCall, float value)
   {
-    reportAllReturns(methodCall, "" + value);
+    reportAllReturns(methodCall, value);
     return value;
   }
 
@@ -220,7 +220,7 @@ public class ResultSetSpy implements ResultSet, Spy
    */
   protected Object reportReturn(String methodCall, Object value)
   {
-    reportAllReturns(methodCall, "" + value);
+    reportAllReturns(methodCall, value);
     return value;
   }
 

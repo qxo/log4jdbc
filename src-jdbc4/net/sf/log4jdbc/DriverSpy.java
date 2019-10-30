@@ -104,8 +104,6 @@ public class DriverSpy implements Driver
    */
   private static Map rdbmsSpecifics;
 
-  static final SpyLogDelegator log = SpyLogFactory.getSpyLogDelegator();
-
   /**
    * Optional package prefix to use for finding application generating point of
    * SQL.
@@ -370,14 +368,17 @@ public class DriverSpy implements Driver
 
   static final Log4jdbcConfigProvider CONFIG_PROVIDER;
 
+  static final SpyLogDelegator log;
+
   static
   {
-    log.debug("... log4jdbc initializing ...");
-
 	final Iterator<Log4jdbcConfigProvider> configLoader = 
-			ServiceLoader.load(Log4jdbcConfigProvider.class).iterator();
+		ServiceLoader.load(Log4jdbcConfigProvider.class).iterator();
 	CONFIG_PROVIDER = configLoader.hasNext() ? configLoader.next() : null;
+	log = SpyLogFactory.getSpyLogDelegator();
+	log.debug("... log4jdbc initializing ...");
 
+	
 	final boolean noDefaultConfig = CONFIG_PROVIDER == null ? false 
 			:"true".equals(CONFIG_PROVIDER.getProperty("log4jdbc.disable_default_config"));
 	

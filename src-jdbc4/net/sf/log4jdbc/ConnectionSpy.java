@@ -16,24 +16,22 @@
 package net.sf.log4jdbc;
 
 import java.sql.Array;
-import java.sql.CallableStatement;
 import java.sql.Blob;
+import java.sql.CallableStatement;
 import java.sql.Clob;
 import java.sql.Connection;
 import java.sql.DatabaseMetaData;
 import java.sql.NClob;
 import java.sql.PreparedStatement;
+import java.sql.SQLClientInfoException;
 import java.sql.SQLException;
 import java.sql.SQLWarning;
+import java.sql.SQLXML;
 import java.sql.Savepoint;
 import java.sql.Statement;
 import java.sql.Struct;
-import java.sql.SQLClientInfoException;
-import java.sql.SQLXML;
-
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Properties;
 import java.util.Set;
@@ -188,26 +186,26 @@ public class ConnectionSpy implements Connection, Spy
     log.exceptionOccured(this, methodCall, exception, null, -1L);
   }
 
-  protected void reportAllReturns(String methodCall, String returnValue)
+  protected void reportAllReturns(String methodCall, Object returnValue)
   {
     log.methodReturned(this, methodCall, returnValue);
   }
 
   private boolean reportReturn(String methodCall, boolean value)
   {
-    reportAllReturns(methodCall, "" + value);
+    reportAllReturns(methodCall, value);
     return value;
   }
 
   private int reportReturn(String methodCall, int value)
   {
-    reportAllReturns(methodCall, "" + value);
+    reportAllReturns(methodCall, value);
     return value;
   }
 
   private Object reportReturn(String methodCall, Object value)
   {
-    reportAllReturns(methodCall, "" + value);
+    reportAllReturns(methodCall, value);
     return value;
   }
 
