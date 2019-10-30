@@ -368,7 +368,7 @@ public class DriverSpy implements Driver
     return val;
   }
 
-  private static final Log4jdbcConfigProvider CONFIG_PROVIDER;
+  static final Log4jdbcConfigProvider CONFIG_PROVIDER;
 
   static
   {

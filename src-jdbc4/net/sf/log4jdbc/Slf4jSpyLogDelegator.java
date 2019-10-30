@@ -72,6 +72,23 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator
    */
   private final Logger debugLogger = LoggerFactory.getLogger("log4jdbc.debug");
 
+  private static final Boolean DEFAULT_ENABLED;
+  private static Boolean currentEnabled;
+  private static final boolean ONLINE_SWITCHABLE;
+  static {
+    String tmp = DriverSpy.CONFIG_PROVIDER.getProperty("log4jdbc.enable");
+    DEFAULT_ENABLED = tmp != null ? Boolean.valueOf(tmp) : null;
+    
+    ONLINE_SWITCHABLE = "true".equals(DriverSpy.CONFIG_PROVIDER.getProperty("log4jdbc.online_switchable"));
+  }
+  public static void setForceEnable(Boolean enabled) {
+    if (!ONLINE_SWITCHABLE) {
+        ;//throw new IllegalAccessError("log4jdbc not for switchable");
+    }
+    Slf4jSpyLogDelegator.currentEnabled = enabled == null ? DEFAULT_ENABLED : enabled;
+  }
+
+
   /**
    * Determine if any of the 5 log4jdbc spy loggers are turned on (jdbc.audit | jdbc.resultset |
    * jdbc.sqlonly | jdbc.sqltiming | jdbc.connection)
@@ -80,6 +97,9 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator
    */
   public boolean isJdbcLoggingEnabled()
   {
+    if (currentEnabled != null) {
+      return currentEnabled;
+    }
     return jdbcLogger.isErrorEnabled() || resultSetLogger.isErrorEnabled() || sqlOnlyLogger.isErrorEnabled() ||
       sqlTimingLogger.isErrorEnabled() || connectionLogger.isErrorEnabled();
   }
@@ -146,7 +166,7 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator
    */
   public void methodReturned(Spy spy, String methodCall, String returnMsg)
   {
-    Logger logger = spy.isResultSetSpy() ? resultSetLogger : jdbcLogger;
+    final Logger logger = spy.isResultSetSpy() ? resultSetLogger : jdbcLogger;
     if (logger.isInfoEnabled())
     {
       String header = spy.getConnectionNumber() + ". " + spy.getClassType() + "." +

@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>com.googlecode.log4jdbc</groupId>
 	<artifactId>log4jdbc</artifactId>
-	<version>1.2-fix4</version>
+	<version>1.2-fix6-jdbc4</version>
 	<packaging>jar</packaging>
 
 	<url>https://github.com/qxo/log4jdbc</url>
