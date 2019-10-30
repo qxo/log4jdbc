@@ -728,7 +728,7 @@ public class PreparedStatementSpy extends StatementSpy implements PreparedStatem
     {
       ResultSet r = realPreparedStatement.executeQuery();
       reportSqlTiming(System.currentTimeMillis() - tstart, dumpedSql, methodCall);
-      ResultSetSpy rsp = new ResultSetSpy(this, r);
+      final ResultSet rsp = DriverSpy.offSpy4ResultSet ? r : new ResultSetSpy(this, r);
       return (ResultSet) reportReturn(methodCall, rsp);
     }
     catch (SQLException s)

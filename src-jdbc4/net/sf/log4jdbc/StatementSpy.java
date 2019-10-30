@@ -582,7 +582,7 @@ public class StatementSpy implements Statement, Spy
       }
       else
       {
-        return (ResultSet) reportReturn(methodCall, new ResultSetSpy(this, r));
+        return (ResultSet) reportReturn(methodCall, DriverSpy.offSpy4ResultSet ? r : new ResultSetSpy(this, r));
       }
     }
     catch (SQLException s)
@@ -663,7 +663,7 @@ public class StatementSpy implements Statement, Spy
     {
       ResultSet result = realStatement.executeQuery(sql);
       reportStatementSqlTiming(System.currentTimeMillis() - tstart, sql, methodCall);
-      ResultSetSpy r = new ResultSetSpy(this, result);
+      final ResultSet r = DriverSpy.offSpy4ResultSet ? result : new ResultSetSpy(this, result);
       return (ResultSet) reportReturn(methodCall, r);
     }
     catch (SQLException s)
@@ -934,7 +934,7 @@ public class StatementSpy implements Statement, Spy
       }
       else
       {
-        return (ResultSet) reportReturn(methodCall, new ResultSetSpy(this, r));
+        return (ResultSet) reportReturn(methodCall, DriverSpy.offSpy4ResultSet ? r : new ResultSetSpy(this, r));
       }
     }
     catch (SQLException s)

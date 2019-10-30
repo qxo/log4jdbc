@@ -74,15 +74,12 @@ public final class Slf4jSpyLogDelegator implements SpyLogDelegator
 
   private static final Boolean DEFAULT_ENABLED;
   private static Boolean currentEnabled;
-  private static final boolean ONLINE_SWITCHABLE;
-  static {
+   static {
     String tmp = DriverSpy.CONFIG_PROVIDER.getProperty("log4jdbc.enable");
     DEFAULT_ENABLED = tmp != null ? Boolean.valueOf(tmp) : null;
-    
-    ONLINE_SWITCHABLE = "true".equals(DriverSpy.CONFIG_PROVIDER.getProperty("log4jdbc.online_switchable"));
   }
   public static void setForceEnable(Boolean enabled) {
-    if (!ONLINE_SWITCHABLE) {
+    if (!DriverSpy.ONLINE_SWITCHABLE) {
         ;//throw new IllegalAccessError("log4jdbc not for switchable");
     }
     Slf4jSpyLogDelegator.currentEnabled = enabled == null ? DEFAULT_ENABLED : enabled;

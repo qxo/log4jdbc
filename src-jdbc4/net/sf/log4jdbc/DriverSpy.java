@@ -370,7 +370,31 @@ public class DriverSpy implements Driver
 
   static final SpyLogDelegator log;
 
-  static
+  static final boolean ONLINE_SWITCHABLE;
+
+  static final boolean offSpy4ResultSetDefault;
+
+  static final boolean offSpy4StatementDefault;
+  
+  static boolean offSpy4ResultSet;
+
+  static boolean offSpy4Statement;
+
+  public static void setOffSpy4ResultSet(final Boolean offSpy4ResultSet) {
+    if (!ONLINE_SWITCHABLE) {
+        return;
+     }
+    DriverSpy.offSpy4ResultSet = offSpy4ResultSet == null ? offSpy4ResultSetDefault :offSpy4ResultSet;
+  }
+ 
+  public static void setOffSpy4Statement(final Boolean offSpy4Statement) {
+    if (!ONLINE_SWITCHABLE) {
+       return;
+    }
+    DriverSpy.offSpy4Statement = offSpy4Statement == null ? offSpy4ResultSetDefault : offSpy4Statement;
+  }
+
+static
   {
 	final Iterator<Log4jdbcConfigProvider> configLoader = 
 		ServiceLoader.load(Log4jdbcConfigProvider.class).iterator();
@@ -378,11 +402,19 @@ public class DriverSpy implements Driver
 	log = SpyLogFactory.getSpyLogDelegator();
 	log.debug("... log4jdbc initializing ...");
 
+	ONLINE_SWITCHABLE = "true".equals(DriverSpy.CONFIG_PROVIDER.getProperty("log4jdbc.online_switchable"));
+
 	
 	final boolean noDefaultConfig = CONFIG_PROVIDER == null ? false 
 			:"true".equals(CONFIG_PROVIDER.getProperty("log4jdbc.disable_default_config"));
 	
     Properties props = noDefaultConfig ? new Properties() : loadConfig();
+
+    offSpy4ResultSetDefault = getBooleanOption(props, "log4jdbc.off.spy.resultset",false);
+    offSpy4StatementDefault = getBooleanOption(props, "log4jdbc.off.spy.statement",false);
+
+    offSpy4ResultSet = offSpy4ResultSetDefault;
+    offSpy4Statement = offSpy4StatementDefault;
 
     // look for additional driver specified in properties
     DebugStackPrefix = getStringOption(props, "log4jdbc.debug.stack.prefix");
