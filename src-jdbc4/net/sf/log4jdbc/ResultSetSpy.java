@@ -37,6 +37,8 @@ import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.Map;
 
+import org.slf4j.Logger;
+
 /**
  * Wraps a ResultSet and reports method calls, returns and exceptions.
  *
@@ -2933,5 +2935,9 @@ public class ResultSetSpy implements ResultSet, Spy
       reportException(methodCall,s);
       throw s;
     }
+  }
+
+  public final boolean isResultSetSpy() {
+    return true;
   }
 }

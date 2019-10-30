@@ -938,4 +938,8 @@ public class ConnectionSpy implements Connection, Spy
       throw s;
     }
   }
+
+  public final boolean isResultSetSpy() {
+    return false;
+  }
 }

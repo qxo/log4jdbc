@@ -146,12 +146,10 @@ public class Slf4jSpyLogDelegator implements SpyLogDelegator
    */
   public void methodReturned(Spy spy, String methodCall, String returnMsg)
   {
-    String classType = spy.getClassType();
-    Logger logger=ResultSetSpy.classTypeDescription.equals(classType)?
-      resultSetLogger:jdbcLogger;
+    Logger logger = spy.isResultSetSpy() ? resultSetLogger : jdbcLogger;
     if (logger.isInfoEnabled())
     {
-      String header = spy.getConnectionNumber() + ". " + classType + "." +
+      String header = spy.getConnectionNumber() + ". " + spy.getClassType() + "." +
         methodCall + " returned " + returnMsg;
       if (logger.isDebugEnabled())
       {

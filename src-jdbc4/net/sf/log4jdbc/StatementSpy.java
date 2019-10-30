@@ -1016,4 +1016,7 @@ public class StatementSpy implements Statement, Spy
     }
   }
 
+  public final boolean isResultSetSpy() {
+    return false;
+  }
 }

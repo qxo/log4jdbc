@@ -40,4 +40,6 @@ public interface Spy
    * @return the connection instance number.
    */
   public Integer getConnectionNumber();
+
+  public boolean isResultSetSpy();
 }
