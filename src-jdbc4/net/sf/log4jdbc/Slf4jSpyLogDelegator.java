@@ -20,8 +20,8 @@ import java.io.LineNumberReader;
 import java.io.StringReader;
 import java.util.StringTokenizer;
 
-import org.slf4j.LoggerFactory;
 import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * Delegates JDBC spy logging events to the the Simple Logging Facade for Java (slf4j).
@@ -72,20 +72,6 @@ public final class Slf4jSpyLogDelegator implements SpyLogDelegator
    */
   private final Logger debugLogger = LoggerFactory.getLogger("log4jdbc.debug");
 
-  private static final Boolean DEFAULT_ENABLED;
-  private static Boolean currentEnabled;
-   static {
-    String tmp = DriverSpy.CONFIG_PROVIDER.getProperty("log4jdbc.enable");
-    DEFAULT_ENABLED = tmp != null ? Boolean.valueOf(tmp) : null;
-  }
-  public static void setForceEnable(Boolean enabled) {
-    if (!DriverSpy.ONLINE_SWITCHABLE) {
-        ;//throw new IllegalAccessError("log4jdbc not for switchable");
-    }
-    Slf4jSpyLogDelegator.currentEnabled = enabled == null ? DEFAULT_ENABLED : enabled;
-  }
-
-
   /**
    * Determine if any of the 5 log4jdbc spy loggers are turned on (jdbc.audit | jdbc.resultset |
    * jdbc.sqlonly | jdbc.sqltiming | jdbc.connection)
@@ -94,8 +80,8 @@ public final class Slf4jSpyLogDelegator implements SpyLogDelegator
    */
   public boolean isJdbcLoggingEnabled()
   {
-    if (currentEnabled != null) {
-      return currentEnabled;
+    if (DriverSpy.currentEnabled != null) {
+      return DriverSpy.currentEnabled;
     }
     return jdbcLogger.isErrorEnabled() || resultSetLogger.isErrorEnabled() || sqlOnlyLogger.isErrorEnabled() ||
       sqlTimingLogger.isErrorEnabled() || connectionLogger.isErrorEnabled();

@@ -144,6 +144,9 @@ public class StatementSpy implements Statement, Spy
    */
   protected final void reportAllReturns(final String methodCall, final Object msg)
   {
+    if(DriverSpy.offSpy4StatementReportAllReturns) {
+      return;
+    }
     log.methodReturned(this, methodCall, msg);
   }
 

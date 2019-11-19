@@ -378,22 +378,34 @@ public class DriverSpy implements Driver
   
   static boolean offSpy4ResultSet;
 
-  static boolean offSpy4Statement;
+  static boolean offSpy4StatementReportAllReturns;
 
-  public static void setOffSpy4ResultSet(final Boolean offSpy4ResultSet) {
+  public static Boolean setOffSpy4ResultSet(final Boolean offSpy4ResultSet) {
     if (!ONLINE_SWITCHABLE) {
-        return;
+        return offSpy4ResultSetDefault;
      }
-    DriverSpy.offSpy4ResultSet = offSpy4ResultSet == null ? offSpy4ResultSetDefault :offSpy4ResultSet;
+    return DriverSpy.offSpy4ResultSet = offSpy4ResultSet == null ? offSpy4ResultSetDefault :offSpy4ResultSet;
   }
  
-  public static void setOffSpy4Statement(final Boolean offSpy4Statement) {
+  public static Boolean setOffSpy4StatementAllReturns(final Boolean offSpy4Statement) {
     if (!ONLINE_SWITCHABLE) {
-       return;
+       return offSpy4StatementDefault;
     }
-    DriverSpy.offSpy4Statement = offSpy4Statement == null ? offSpy4ResultSetDefault : offSpy4Statement;
+    return DriverSpy.offSpy4StatementReportAllReturns = offSpy4Statement == null ? offSpy4StatementDefault : offSpy4Statement;
   }
 
+
+  private static final Boolean DEFAULT_ENABLED;
+  static Boolean currentEnabled;
+
+  //arthas: ognl '@net.sf.log4jdbc.DriverSpy@setForceEnable(false)`
+  public static Boolean setForceEnable(Boolean enabled) {
+    if (!DriverSpy.ONLINE_SWITCHABLE) {
+       return DEFAULT_ENABLED;//throw new IllegalAccessError("log4jdbc not for switchable");
+    }
+    return currentEnabled = enabled == null ? DEFAULT_ENABLED : enabled;
+  }
+  
 static
   {
 	final Iterator<Log4jdbcConfigProvider> configLoader = 
@@ -404,7 +416,10 @@ static
 
 	ONLINE_SWITCHABLE = "true".equals(DriverSpy.CONFIG_PROVIDER.getProperty("log4jdbc.online_switchable"));
 
-	
+    String tmp = DriverSpy.CONFIG_PROVIDER.getProperty("log4jdbc.enable");
+    DEFAULT_ENABLED = tmp != null ? Boolean.valueOf(tmp) : null;
+    currentEnabled = DEFAULT_ENABLED;
+    
 	final boolean noDefaultConfig = CONFIG_PROVIDER == null ? false 
 			:"true".equals(CONFIG_PROVIDER.getProperty("log4jdbc.disable_default_config"));
 	
@@ -414,7 +429,7 @@ static
     offSpy4StatementDefault = getBooleanOption(props, "log4jdbc.off.spy.statement",false);
 
     offSpy4ResultSet = offSpy4ResultSetDefault;
-    offSpy4Statement = offSpy4StatementDefault;
+    offSpy4StatementReportAllReturns = offSpy4StatementDefault;
 
     // look for additional driver specified in properties
     DebugStackPrefix = getStringOption(props, "log4jdbc.debug.stack.prefix");
@@ -859,5 +874,9 @@ protected static Properties loadConfig() {
 
     lastUnderlyingDriverRequested = d;
     return d.getPropertyInfo(url, info);
+  }
+
+  public static final boolean isJdbcLoggingEnabled() {
+	return log.isJdbcLoggingEnabled();
   }
 }

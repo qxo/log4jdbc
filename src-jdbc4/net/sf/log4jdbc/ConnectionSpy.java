@@ -323,7 +323,7 @@ public class ConnectionSpy implements Connection, Spy
     try
     {
       Statement stmt = realConnection.createStatement();
-      return (Statement) reportReturn(methodCall,DriverSpy.offSpy4Statement ? stmt : new StatementSpy(this, stmt));
+      return (Statement) reportReturn(methodCall, new StatementSpy(this, stmt));
     }
     catch (SQLException s)
     {
@@ -338,7 +338,7 @@ public class ConnectionSpy implements Connection, Spy
     try
     {
       Statement stmt = realConnection.createStatement(resultSetType, resultSetConcurrency);
-      return (Statement) reportReturn(methodCall, DriverSpy.offSpy4Statement ? stmt : new StatementSpy(this, stmt));
+      return (Statement) reportReturn(methodCall, new StatementSpy(this, stmt));
     }
     catch (SQLException s)
     {
@@ -354,7 +354,7 @@ public class ConnectionSpy implements Connection, Spy
     {
       Statement stmt = realConnection.createStatement(resultSetType, resultSetConcurrency,
         resultSetHoldability);
-      return (Statement) reportReturn(methodCall, DriverSpy.offSpy4Statement ? stmt : new StatementSpy(this, stmt));
+      return (Statement) reportReturn(methodCall, new StatementSpy(this, stmt));
     }
     catch (SQLException s)
     {
