@@ -414,9 +414,9 @@ static
 	log = SpyLogFactory.getSpyLogDelegator();
 	log.debug("... log4jdbc initializing ...");
 
-	ONLINE_SWITCHABLE = "true".equals(DriverSpy.CONFIG_PROVIDER.getProperty("log4jdbc.online_switchable"));
+	ONLINE_SWITCHABLE = CONFIG_PROVIDER == null ? false : "true".equals(CONFIG_PROVIDER.getProperty("log4jdbc.online_switchable"));
 
-    String tmp = DriverSpy.CONFIG_PROVIDER.getProperty("log4jdbc.enable");
+    String tmp = CONFIG_PROVIDER == null ? null : CONFIG_PROVIDER.getProperty("log4jdbc.enable");
     DEFAULT_ENABLED = tmp != null ? Boolean.valueOf(tmp) : null;
     currentEnabled = DEFAULT_ENABLED;
     
